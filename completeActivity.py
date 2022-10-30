@@ -4,7 +4,7 @@ mydb = database_connect()
 cursor = mydb.cursor()
 
 
-sql = "SELECT * FROM List_of_Activities"
+sql = "SELECT * FROM List_of_Activities WHERE isDone IS NULL"
 cursor.execute(sql)
 data = cursor.fetchall()
 

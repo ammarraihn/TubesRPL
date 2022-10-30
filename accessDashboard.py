@@ -3,8 +3,8 @@ from database_connect import database_connect
 mydb = database_connect()
 cursor = mydb.cursor()
 
-
-sql = "SELECT * FROM List_of_Activities WHERE Deadline = CURDATE()"
+# ONGOING ACTIVITY
+sql = "SELECT * FROM List_of_Activities WHERE Deadline <= CURDATE() AND isDone IS NULL"
 cursor.execute(sql)
 data = cursor.fetchall()
 
