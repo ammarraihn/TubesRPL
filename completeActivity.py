@@ -4,7 +4,7 @@ mydb = database_connect()
 cursor = mydb.cursor()
 
 
-sql = "SELECT * FROM List_of_Activities WHERE isDone IS NULL"
+sql = "SELECT ActivityID, ActivityName, Deadline, CategoryName FROM List_of_Activities INNER JOIN list_of_categories WHERE isDone = FALSE"
 cursor.execute(sql)
 data = cursor.fetchall()
 
