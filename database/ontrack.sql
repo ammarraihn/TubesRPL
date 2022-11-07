@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+-- MariaDB dump 10.19  Distrib 10.4.25-MariaDB, for Win64 (AMD64)
 --
 -- Host: localhost    Database: ontrack
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,15 +21,17 @@
 
 DROP TABLE IF EXISTS `list_of_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `list_of_activities` (
   `ActivityID` int NOT NULL AUTO_INCREMENT,
   `ActivityName` varchar(255) NOT NULL,
   `Deadline` date NOT NULL,
-  `CategoryID` varchar(255) NOT NULL,
+  `CategoryName` varchar(255) NOT NULL,
   `isDone` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`ActivityID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`ActivityID`),
+  KEY `FK_Category` (`CategoryName`),
+  CONSTRAINT `FK_Category` FOREIGN KEY (`CategoryName`) REFERENCES `list_of_categories` (`CategoryName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +40,6 @@ CREATE TABLE `list_of_activities` (
 
 LOCK TABLES `list_of_activities` WRITE;
 /*!40000 ALTER TABLE `list_of_activities` DISABLE KEYS */;
-INSERT INTO `list_of_activities` VALUES (3,'Makan risol','2022-10-31','1',1),(5,'idle','2023-01-01','1',1),(6,'daftar tourney popol','2023-01-01','1',0),(7,'push mitik','2021-01-01','1',0);
 /*!40000 ALTER TABLE `list_of_activities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,12 +49,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `list_of_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `list_of_categories` (
-  `CategoryID` int NOT NULL AUTO_INCREMENT,
+  `CategoryID` int NOT NULL,
   `CategoryName` varchar(255) NOT NULL,
-  PRIMARY KEY (`CategoryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`CategoryName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +63,7 @@ CREATE TABLE `list_of_categories` (
 
 LOCK TABLES `list_of_categories` WRITE;
 /*!40000 ALTER TABLE `list_of_categories` DISABLE KEYS */;
-INSERT INTO `list_of_categories` VALUES (1,'Kuliah');
+INSERT INTO `list_of_categories` VALUES (1,'Academic'),(2,'Entertainment'),(3,'Social'),(4,'Others');
 /*!40000 ALTER TABLE `list_of_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -75,4 +76,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-10-31 10:33:21
+-- Dump completed on 2022-11-07 20:51:02

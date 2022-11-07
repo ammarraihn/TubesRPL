@@ -1,11 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
-
-
 from PIL import Image, ImageTk
-from manageActivity import addActivity
-
 from userInterface import Dashboard, Completed, Expired
 
 
@@ -31,7 +27,7 @@ class mainApp(tk.Tk):
         
         self.show_frame(Dashboard)
 
-    
+
     def navbar(self):   # Navigation bar setiap page
 
         # HEADER
@@ -47,10 +43,6 @@ class mainApp(tk.Tk):
         label1.image = logo_ontrack
         label1.pack(side=LEFT, pady=20, padx=15)
         
-
-        # EXPIRED BUTTON
-        expired = Button(self.header, text="Expired", command=lambda: self.show_frame(Expired), padx=20, pady=12)
-        expired.pack(side=RIGHT, padx=50)
 
         # COMPLETED BUTTON
         completed = Button(self.header, text="Completed", command=lambda: self.show_frame(Completed), padx=20, pady=12)
@@ -73,8 +65,6 @@ class mainApp(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
         
-    
-
 
 if __name__ == "__main__":
     app = mainApp()
