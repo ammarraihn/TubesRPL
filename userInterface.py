@@ -22,32 +22,32 @@ class Dashboard(tk.Frame):
 
         self.manageAct =manageActivity(self)
 
-        self.centralframe = Frame(self, background="#f35c27")
+        self.centralframe = Frame(self, background="#1c2e3e")
         self.centralframe.pack(ipady=700, ipadx=700)
 
-        self.lbl = Label(self.centralframe, text="DASHBOARD", font=HEADING1, background="#f35c27", borderwidth=0, fg="white")
+        self.lbl = Label(self.centralframe, text="DASHBOARD", font=HEADING1, background="#1c2e3e", borderwidth=0, fg="white")
         self.lbl.pack(anchor="center", pady=55)
 
         self.ongoingframe = Frame(self.centralframe)
         self.ongoingframe.pack(ipady=130, ipadx=400)
-        self.ongoingframelabel = LabelFrame(self.ongoingframe, text="Task for Today", font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.ongoingframelabel = LabelFrame(self.ongoingframe, text="Task for Today", font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.ongoingframelabel.pack(fill=BOTH, expand=YES, ipady=16)
         self.ongoingframe.pack_propagate(False)
 
         self.idleframe = Frame(self.centralframe)
         self.idleframe.pack(ipady=130, ipadx=400, pady=20)
-        self.idleframelabel = LabelFrame(self.idleframe, text="Your Task Later",font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.idleframelabel = LabelFrame(self.idleframe, text="Your Task Later",font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.idleframelabel.pack(fill=BOTH, expand=YES, ipady=16)
         self.idleframe.pack_propagate(False)
 
-        self.btnframe = Frame(self.centralframe, background="#f35c27")
+        self.btnframe = Frame(self.centralframe, background="#1c2e3e")
         self.btnframe.pack(ipadx=70, ipady=20, pady=30)
         
-        self.addbtn = Button(self.btnframe, text="Add", command = self.popup_window, borderwidth=0, background="#1c2e3e", fg="white", font=FONT)
+        self.addbtn = Button(self.btnframe, text="Add", command = self.popup_window, borderwidth=0, background="#ffffff", fg="#1c2e3e", font=FONT)
         self.addbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
-        self.deletebtn = Button(self.btnframe, text="Delete", command= self.manageAct.deleteActivity, borderwidth=0, background="#1c2e3e", fg="white", font=FONT)
+        self.deletebtn = Button(self.btnframe, text="Delete", command= self.manageAct.deleteActivity, borderwidth=0, background="#ffffff", fg="#1c2e3e", font=FONT)
         self.deletebtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
-        self.markbtn = Button(self.btnframe, text="Mark Complete", command= self.manageAct.markAsComplete, borderwidth=0, background="#1c2e3e", fg="white", font=FONT)
+        self.markbtn = Button(self.btnframe, text="Mark Complete", command= self.manageAct.markAsComplete, borderwidth=0, background="#f35c27", fg="#1c2e3e", font=FONT)
         self.markbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
         
         # Treeview styling configuration
@@ -177,25 +177,25 @@ class Dashboard(tk.Frame):
 
 class Completed(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, background="#f35c27")
+        tk.Frame.__init__(self, parent, background="#1c2e3e")
         self.controller = controller
         
 
-        self.centralframe = Frame(self, background="#f35c27")
+        self.centralframe = Frame(self, background="#1c2e3e")
         self.centralframe.pack(ipady=700, ipadx=700, pady=35)
 
-        self.lbl = Label(self.centralframe, text="COMPLETED", font=HEADING1, background="#f35c27", borderwidth=0, fg="white")
+        self.lbl = Label(self.centralframe, text="COMPLETED", font=HEADING1, background="#1c2e3e", borderwidth=0, fg="white")
         self.lbl.pack(anchor="n", pady=20)
 
-        self.categorycentralframe = Frame(self.centralframe, background="#f35c27")
+        self.categorycentralframe = Frame(self.centralframe, background="#1c2e3e")
         self.categorycentralframe.pack(ipadx=600, ipady=10, pady=40)
 
         # ACADEMIC FRAME
-        self.category1frame = Frame(self.categorycentralframe, background="#f35c27")
+        self.category1frame = Frame(self.categorycentralframe, background="#1c2e3e")
         self.category1frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category1frame.pack_propagate(False)
 
-        self.category1frametitle = Label(self.category1frame, text="Academic", font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.category1frametitle = Label(self.category1frame, text="Academic", font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.category1frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category1 = Scrollbar(self.category1frame, orient=VERTICAL)
@@ -215,11 +215,11 @@ class Completed(tk.Frame):
         self.fetchCategory1Data()
 
         # ENTERTAINMENT FRAME
-        self.category2frame = Frame(self.categorycentralframe, background="#f35c27")
+        self.category2frame = Frame(self.categorycentralframe, background="#1c2e3e")
         self.category2frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category2frame.pack_propagate(False)
 
-        self.category2frametitle = Label(self.category2frame, text="Entertainment", font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.category2frametitle = Label(self.category2frame, text="Entertainment", font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.category2frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category2 = Scrollbar(self.category2frame, orient=VERTICAL)
@@ -239,11 +239,11 @@ class Completed(tk.Frame):
         self.fetchCategory2Data()
 
         # SOCIAL FRAME
-        self.category3frame = Frame(self.categorycentralframe, background="#f35c27")
+        self.category3frame = Frame(self.categorycentralframe, background="#1c2e3e")
         self.category3frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category3frame.pack_propagate(False)
 
-        self.category3frametitle = Label(self.category3frame, text="Social", font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.category3frametitle = Label(self.category3frame, text="Social", font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.category3frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category3 = Scrollbar(self.category3frame, orient=VERTICAL)
@@ -263,11 +263,11 @@ class Completed(tk.Frame):
         self.fetchCategory3Data()
 
         # OTHERs FRAME
-        self.category4frame = Frame(self.categorycentralframe, background="#f35c27")
+        self.category4frame = Frame(self.categorycentralframe, background="#1c2e3e")
         self.category4frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category4frame.pack_propagate(False)
 
-        self.category4frametitle = Label(self.category4frame, text="Others", font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.category4frametitle = Label(self.category4frame, text="Others", font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.category4frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category4 = Scrollbar(self.category4frame, orient=VERTICAL)
