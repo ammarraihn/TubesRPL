@@ -1,15 +1,12 @@
 from tkinter import *
-import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
-
 from manageActivity import manageActivity
-from sqlite3 import Cursor
+import tkinter as tk
 import mysql.connector
 
-HEADING1 = ('Perpetua', 20, 'bold')
-HEADING2 = ('Perpetua', 14)
-FONT = ('Perpetua', 12)
+HEADING1 = ('Poppins', 20, 'bold')
+HEADING2 = ('Poppins', 14)
+FONT = ('Poppins', 12)
 
 
 class Dashboard(tk.Frame):
@@ -25,34 +22,54 @@ class Dashboard(tk.Frame):
 
         self.manageAct =manageActivity(self)
 
-        self.centralframe = Frame(self, highlightbackground="black", highlightthickness=1)
+        self.centralframe = Frame(self, background="#f35c27")
         self.centralframe.pack(ipady=700, ipadx=700)
 
-        self.lbl = Label(self.centralframe, text="DASHBOARD", font=HEADING1)
-        self.lbl.pack(anchor="center", pady=20)
+        self.lbl = Label(self.centralframe, text="DASHBOARD", font=HEADING1, background="#f35c27", borderwidth=0, fg="white")
+        self.lbl.pack(anchor="center", pady=55)
 
-        self.ongoingframe = Frame(self.centralframe, highlightbackground="black", highlightthickness=1)
+        self.ongoingframe = Frame(self.centralframe)
         self.ongoingframe.pack(ipady=130, ipadx=400)
-        self.ongoingframelabel = LabelFrame(self.ongoingframe, text="Task for Today", font=HEADING2)
-        self.ongoingframelabel.pack(fill=BOTH, expand=YES)
+        self.ongoingframelabel = LabelFrame(self.ongoingframe, text="Task for Today", font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.ongoingframelabel.pack(fill=BOTH, expand=YES, ipady=16)
         self.ongoingframe.pack_propagate(False)
 
-        self.idleframe = Frame(self.centralframe, highlightbackground="black", highlightthickness=1)
+        self.idleframe = Frame(self.centralframe)
         self.idleframe.pack(ipady=130, ipadx=400, pady=20)
-        self.idleframelabel = LabelFrame(self.idleframe, text="Your Task Later",font=HEADING2)
-        self.idleframelabel.pack(fill=BOTH, expand=YES)
+        self.idleframelabel = LabelFrame(self.idleframe, text="Your Task Later",font=HEADING2, background="#f35c27", foreground="#ffffff")
+        self.idleframelabel.pack(fill=BOTH, expand=YES, ipady=16)
         self.idleframe.pack_propagate(False)
 
-        self.btnframe = Frame(self.centralframe, highlightbackground="black", highlightthickness=1)
-        self.btnframe.pack(ipadx=70, ipady=20)
+        self.btnframe = Frame(self.centralframe, background="#f35c27")
+        self.btnframe.pack(ipadx=70, ipady=20, pady=30)
         
-        self.addbtn = Button(self.btnframe, text="Add", command = self.popup_window)
-        self.addbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH)
-        self.deletebtn = Button(self.btnframe, text="Delete", command= self.manageAct.deleteActivity)
-        self.deletebtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH)
-        self.markbtn = Button(self.btnframe, text="Mark Complete", command= self.manageAct.markAsComplete)
-        self.markbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH)
+        self.addbtn = Button(self.btnframe, text="Add", command = self.popup_window, borderwidth=0, background="#1c2e3e", fg="white", font=FONT)
+        self.addbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
+        self.deletebtn = Button(self.btnframe, text="Delete", command= self.manageAct.deleteActivity, borderwidth=0, background="#1c2e3e", fg="white", font=FONT)
+        self.deletebtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
+        self.markbtn = Button(self.btnframe, text="Mark Complete", command= self.manageAct.markAsComplete, borderwidth=0, background="#1c2e3e", fg="white", font=FONT)
+        self.markbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
         
+        # Treeview styling configuration
+        style1 = ttk.Style()
+        style1.theme_use('clam')
+        style1.configure('Treeview',
+            background="#ffffff",
+            foreground="#1c2e3e",
+            rowheight="20",
+            fieldbackground="#ffffff",
+            font=FONT
+            )
+        style1.map('Treeview', background=[('selected', '#33d0e5')])
+
+        style2 = ttk.Style()
+        style2.configure('Treeview.Heading',
+            background="#1c2e3e",
+            foreground="#ffffff",
+            rowheight="20",
+            font=FONT
+            )
+
         # Table OnGoing Activity
         scroll_y_ongoing = Scrollbar(self.ongoingframe, orient=VERTICAL)
         self.ongoing_records = ttk.Treeview (self.ongoingframe, height=10, columns=("ActivityID", "Activity", "Category", "Deadline"), yscrollcommand= scroll_y_ongoing)
@@ -97,7 +114,6 @@ class Dashboard(tk.Frame):
 
     def popup_window(self):    # Add Activity Pop Up
 
-
         self.popup = Toplevel(self)
 
         self.popup.title("Add Your Activity to Keep Your Productivity")
@@ -138,12 +154,14 @@ class Dashboard(tk.Frame):
             mydb.commit()
         mydb.close()
 
+        
+
     def fetchIdleData(self): # fetch record idle
         self.idle_records.delete(*self.idle_records.get_children())# Reset treeviewnya
 
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityID, ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline > CURDATE() AND isDone = FALSE")
+        cursor.execute("SELECT ActivityID, ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline > CURDATE() AND isDone = FALSE ORDER BY Deadline ASC")
         result = cursor.fetchall()
         if len(result) != 0:
             self.idle_records.delete(*self.idle_records.get_children())
@@ -159,23 +177,25 @@ class Dashboard(tk.Frame):
 
 class Completed(tk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, background="#f35c27")
         self.controller = controller
         
 
-        self.centralframe = Frame(self)
+        self.centralframe = Frame(self, background="#f35c27")
         self.centralframe.pack(ipady=700, ipadx=700, pady=35)
 
-        self.lbl = Label(self.centralframe, text="COMPLETED", font=HEADING1)
-        self.lbl.pack(anchor="center", pady=20)
+        self.lbl = Label(self.centralframe, text="COMPLETED", font=HEADING1, background="#f35c27", borderwidth=0, fg="white")
+        self.lbl.pack(anchor="n", pady=20)
 
+        self.categorycentralframe = Frame(self.centralframe, background="#f35c27")
+        self.categorycentralframe.pack(ipadx=600, ipady=10, pady=40)
 
         # ACADEMIC FRAME
-        self.category1frame = Frame(self.centralframe)
+        self.category1frame = Frame(self.categorycentralframe, background="#f35c27")
         self.category1frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category1frame.pack_propagate(False)
 
-        self.category1frametitle = Label(self.category1frame, text="Academic", font=HEADING2)
+        self.category1frametitle = Label(self.category1frame, text="Academic", font=HEADING2, background="#f35c27", foreground="#ffffff")
         self.category1frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category1 = Scrollbar(self.category1frame, orient=VERTICAL)
@@ -195,11 +215,11 @@ class Completed(tk.Frame):
         self.fetchCategory1Data()
 
         # ENTERTAINMENT FRAME
-        self.category2frame = Frame(self.centralframe)
+        self.category2frame = Frame(self.categorycentralframe, background="#f35c27")
         self.category2frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category2frame.pack_propagate(False)
 
-        self.category2frametitle = Label(self.category2frame, text="Entertainment", font=HEADING2)
+        self.category2frametitle = Label(self.category2frame, text="Entertainment", font=HEADING2, background="#f35c27", foreground="#ffffff")
         self.category2frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category2 = Scrollbar(self.category2frame, orient=VERTICAL)
@@ -219,11 +239,11 @@ class Completed(tk.Frame):
         self.fetchCategory2Data()
 
         # SOCIAL FRAME
-        self.category3frame = Frame(self.centralframe)
+        self.category3frame = Frame(self.categorycentralframe, background="#f35c27")
         self.category3frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category3frame.pack_propagate(False)
 
-        self.category3frametitle = Label(self.category3frame, text="Social", font=HEADING2)
+        self.category3frametitle = Label(self.category3frame, text="Social", font=HEADING2, background="#f35c27", foreground="#ffffff")
         self.category3frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category3 = Scrollbar(self.category3frame, orient=VERTICAL)
@@ -243,11 +263,11 @@ class Completed(tk.Frame):
         self.fetchCategory3Data()
 
         # OTHERs FRAME
-        self.category4frame = Frame(self.centralframe)
+        self.category4frame = Frame(self.categorycentralframe, background="#f35c27")
         self.category4frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category4frame.pack_propagate(False)
 
-        self.category4frametitle = Label(self.category4frame, text="Others", font=HEADING2)
+        self.category4frametitle = Label(self.category4frame, text="Others", font=HEADING2, background="#f35c27", foreground="#ffffff")
         self.category4frametitle.pack(anchor="center", pady=20)
 
         scroll_y_category4 = Scrollbar(self.category4frame, orient=VERTICAL)
@@ -271,7 +291,7 @@ class Completed(tk.Frame):
 
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Academic' AND isDone = TRUE")
+        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Academic' AND isDone = TRUE ORDER BY Deadline ASC")
         result = cursor.fetchall()
         if len(result) != 0:
             self.category1_records.delete(*self.category1_records.get_children())
@@ -285,7 +305,7 @@ class Completed(tk.Frame):
 
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Entertainment' AND isDone = TRUE")
+        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Entertainment' AND isDone = TRUE ORDER BY Deadline ASC")
         result = cursor.fetchall()
         if len(result) != 0:
             self.category2_records.delete(*self.category2_records.get_children())
@@ -299,7 +319,7 @@ class Completed(tk.Frame):
 
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Social' AND isDone = TRUE")
+        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Social' AND isDone = TRUE ORDER BY Deadline ASC")
         result = cursor.fetchall()
         if len(result) != 0:
             self.category3_records.delete(*self.category3_records.get_children())
@@ -313,7 +333,7 @@ class Completed(tk.Frame):
 
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Others' AND isDone = TRUE")
+        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Others' AND isDone = TRUE ORDER BY Deadline ASC")
         result = cursor.fetchall()
         if len(result) != 0:
             self.category4_records.delete(*self.category4_records.get_children())
