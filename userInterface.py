@@ -18,6 +18,11 @@ class Dashboard(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
+        self.activityID = IntVar()
+        self.activityName = StringVar()
+        self.category = StringVar()
+        self.deadline = StringVar()
+
         self.manageAct =manageActivity(self)
 
         self.centralframe = Frame(self, highlightbackground="black", highlightthickness=1)
@@ -28,10 +33,14 @@ class Dashboard(tk.Frame):
 
         self.ongoingframe = Frame(self.centralframe, highlightbackground="black", highlightthickness=1)
         self.ongoingframe.pack(ipady=130, ipadx=400)
+        self.ongoingframelabel = LabelFrame(self.ongoingframe, text="Task for Today", font=HEADING2)
+        self.ongoingframelabel.pack(fill=BOTH, expand=YES)
         self.ongoingframe.pack_propagate(False)
 
         self.idleframe = Frame(self.centralframe, highlightbackground="black", highlightthickness=1)
         self.idleframe.pack(ipady=130, ipadx=400, pady=20)
+        self.idleframelabel = LabelFrame(self.idleframe, text="Your Task Later",font=HEADING2)
+        self.idleframelabel.pack(fill=BOTH, expand=YES)
         self.idleframe.pack_propagate(False)
 
         self.btnframe = Frame(self.centralframe, highlightbackground="black", highlightthickness=1)
@@ -84,9 +93,6 @@ class Dashboard(tk.Frame):
 
     def popup_window(self):    # Add Activity Pop Up
 
-        self.activityName = StringVar()
-        self.category = StringVar()
-        self.deadline = StringVar()
 
         self.popup = Toplevel(self)
 
@@ -145,7 +151,7 @@ class Completed(tk.Frame):
         self.controller = controller
         
 
-        self.centralframe = Frame(self, highlightbackground="black", highlightthickness=1)
+        self.centralframe = Frame(self)
         self.centralframe.pack(ipady=700, ipadx=700, pady=35)
 
         self.lbl = Label(self.centralframe, text="COMPLETED", font=HEADING1)
@@ -153,7 +159,7 @@ class Completed(tk.Frame):
 
 
         # ACADEMIC FRAME
-        self.category1frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
+        self.category1frame = Frame(self.centralframe)
         self.category1frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category1frame.pack_propagate(False)
 
@@ -177,7 +183,7 @@ class Completed(tk.Frame):
         self.fetchCategory1Data()
 
         # ENTERTAINMENT FRAME
-        self.category2frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
+        self.category2frame = Frame(self.centralframe)
         self.category2frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category2frame.pack_propagate(False)
 
@@ -201,7 +207,7 @@ class Completed(tk.Frame):
         self.fetchCategory2Data()
 
         # SOCIAL FRAME
-        self.category3frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
+        self.category3frame = Frame(self.centralframe)
         self.category3frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category3frame.pack_propagate(False)
 
@@ -225,7 +231,7 @@ class Completed(tk.Frame):
         self.fetchCategory3Data()
 
         # OTHERs FRAME
-        self.category4frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
+        self.category4frame = Frame(self.centralframe)
         self.category4frame.pack(padx=20, side=LEFT, expand=True, fill=X, ipady=250)
         self.category4frame.pack_propagate(False)
 
@@ -295,24 +301,3 @@ class Completed(tk.Frame):
                 self.category4_records.insert('', END, values= row)
             mydb.commit()
         mydb.close()
-
-class Expired(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        
-        self.centralframe = Frame(self, highlightbackground="black", highlightthickness=1)
-        self.centralframe.pack(ipady=700, ipadx=900, pady=35)
-
-        self.lbl = Label(self.centralframe, text="EXPIRED" )
-        self.lbl.pack()
-
-        self.category1frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
-        self.category1frame.pack(padx=20, side=RIGHT, expand=True, fill=BOTH)
-        self.category2frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
-        self.category2frame.pack(padx=20, side=RIGHT, expand=True, fill=BOTH)
-        self.category3frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
-        self.category3frame.pack(padx=20, side=RIGHT, expand=True, fill=BOTH)
-        self.category4frame = Frame(self.centralframe, highlightbackground="red", highlightthickness=1)
-        self.category4frame.pack(padx=20, side=RIGHT, expand=True, fill=BOTH)
-

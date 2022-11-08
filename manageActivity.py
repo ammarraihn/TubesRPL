@@ -31,15 +31,33 @@ class manageActivity(tk.Tk):
     def deleteActivity(self):
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("DELETE FROM List_of_Activities WHERE ActivityName = %s", self.parent.activityName.get())
-        
+
+        """ # fetch data
+        sql = "SELECT * FROM List_of_Activities WHERE ActivitiyID = %s"
+        vals = ([self.parent.activityID.get()] )
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        print(vals) """
+
+        sql = "DELETE FROM List_of_Activities WHERE ActivityName = %s"
+        vals = ([self.parent.activityName.get()] )
+        cursor.execute(sql, vals)
+        print(vals)
+        mydb.commit()
+        self.parent.fetchOngoingData()
+        self.parent.fetchIdleData()
+        mydb.close()
+        messagebox.showinfo("Delete", "Record Deleted Succsessfully")
+
+    def markAsComplete(self):
+        mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
+        cursor = mydb.cursor()
+        cursor.execute("UPDATE List_of_Activities SET isDone = TRUE WHERE ActivityID = %s", self.parent.activityID.get())
         mydb.commit()
         mydb.close()
         self.parent.fetchOngoingData()
+        self.parent.fetchIdleData()
         messagebox.showinfo("Add Activity Form", "Activity Record Entered Succsessfully")
-
-    def markAsComplete(self):
-        pass
             
 
 

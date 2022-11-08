@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 from PIL import Image, ImageTk
-from userInterface import Dashboard, Completed, Expired
+from userInterface import Dashboard, Completed
 
 
 class mainApp(tk.Tk):
@@ -20,7 +20,7 @@ class mainApp(tk.Tk):
 
         self.frames = {}
 
-        for Page in (Dashboard, Completed, Expired):
+        for Page in (Dashboard, Completed):
             frame = Page(self.container, self)
             self.frames[Page] = frame
             frame.grid(row=0, column=0, sticky="nsew")
