@@ -63,6 +63,7 @@ class mainApp(tk.Tk):
 
     def show_frame(self, cont):
         frame = self.frames[cont]
+        frame.refetchData()
         frame.tkraise()
         
 

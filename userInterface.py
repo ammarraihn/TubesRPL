@@ -50,13 +50,15 @@ class Dashboard(tk.Frame):
         self.addbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH)
         self.deletebtn = Button(self.btnframe, text="Delete", command= self.manageAct.deleteActivity)
         self.deletebtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH)
-        self.markbtn = Button(self.btnframe, text="Mark Complete")
+        self.markbtn = Button(self.btnframe, text="Mark Complete", command= self.manageAct.markAsComplete)
         self.markbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH)
         
         # Table OnGoing Activity
         scroll_y_ongoing = Scrollbar(self.ongoingframe, orient=VERTICAL)
-        self.ongoing_records = ttk.Treeview (self.ongoingframe, height=10, columns=("Activity", "Category", "Deadline"), yscrollcommand= scroll_y_ongoing)
+        self.ongoing_records = ttk.Treeview (self.ongoingframe, height=10, columns=("ActivityID", "Activity", "Category", "Deadline"), yscrollcommand= scroll_y_ongoing)
         scroll_y_ongoing.pack(side="right", fill=Y)
+
+        self.ongoing_records["displaycolumns"]=("Activity", "Category", "Deadline")
 
         self.ongoing_records.heading("Activity", text="Activity")
         self.ongoing_records.heading("Category", text="Category")
@@ -74,8 +76,10 @@ class Dashboard(tk.Frame):
 
         # Table Idle Activity
         scroll_y_ongoing = Scrollbar(self.idleframe, orient=VERTICAL)
-        self.idle_records = ttk.Treeview (self.idleframe, height=10, columns=("Activity", "Category", "Deadline"), yscrollcommand= scroll_y_ongoing)
+        self.idle_records = ttk.Treeview (self.idleframe, height=10, columns=("ActivityID", "Activity", "Category", "Deadline"), yscrollcommand= scroll_y_ongoing)
         scroll_y_ongoing.pack(side="right", fill=Y)
+
+        self.idle_records["displaycolumns"]=("Activity", "Category", "Deadline")
 
         self.idle_records.heading("Activity", text="Activity")
         self.idle_records.heading("Category", text="Category")
@@ -121,9 +125,11 @@ class Dashboard(tk.Frame):
         self.btn1.pack( pady=10)
 
     def fetchOngoingData(self): # fetch record ongoing
+        self.ongoing_records.delete(*self.ongoing_records.get_children()) # Reset treeviewnya
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline = CURDATE() AND isDone = FALSE")
+        cursor.execute("SELECT ActivityID, ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline = CURDATE() AND isDone = FALSE")
         result = cursor.fetchall()
         if len(result) != 0:
             self.ongoing_records.delete(*self.ongoing_records.get_children())
@@ -133,9 +139,11 @@ class Dashboard(tk.Frame):
         mydb.close()
 
     def fetchIdleData(self): # fetch record idle
+        self.idle_records.delete(*self.idle_records.get_children())# Reset treeviewnya
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline > CURDATE() AND isDone = FALSE")
+        cursor.execute("SELECT ActivityID, ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline > CURDATE() AND isDone = FALSE")
         result = cursor.fetchall()
         if len(result) != 0:
             self.idle_records.delete(*self.idle_records.get_children())
@@ -143,6 +151,10 @@ class Dashboard(tk.Frame):
                 self.idle_records.insert('', END, values= row)
             mydb.commit()
         mydb.close()
+
+    def refetchData(self):
+        self.fetchOngoingData()
+        self.fetchIdleData()
         
 
 class Completed(tk.Frame):
@@ -255,6 +267,8 @@ class Completed(tk.Frame):
         self.fetchCategory4Data()
 
     def fetchCategory1Data(self):
+        self.category1_records.delete(*self.category1_records.get_children()) # Reset treeviewnya
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
         cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Academic' AND isDone = TRUE")
@@ -267,6 +281,8 @@ class Completed(tk.Frame):
         mydb.close()
 
     def fetchCategory2Data(self):
+        self.category2_records.delete(*self.category2_records.get_children()) # Reset treeviewnya
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
         cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Entertainment' AND isDone = TRUE")
@@ -279,6 +295,8 @@ class Completed(tk.Frame):
         mydb.close()
 
     def fetchCategory3Data(self):
+        self.category3_records.delete(*self.category3_records.get_children()) # Reset treeviewnya
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
         cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Social' AND isDone = TRUE")
@@ -291,6 +309,8 @@ class Completed(tk.Frame):
         mydb.close()
 
     def fetchCategory4Data(self):
+        self.category4_records.delete(*self.category4_records.get_children()) # Reset treeviewnya
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
         cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Others' AND isDone = TRUE")
@@ -301,3 +321,10 @@ class Completed(tk.Frame):
                 self.category4_records.insert('', END, values= row)
             mydb.commit()
         mydb.close()
+
+    def refetchData(self):
+        self.fetchCategory1Data()
+        self.fetchCategory2Data()
+        self.fetchCategory3Data()
+        self.fetchCategory4Data()
+    

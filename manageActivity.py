@@ -29,35 +29,60 @@ class manageActivity(tk.Tk):
             messagebox.showinfo("Add Activity Form", "Activity Record Entered Succsessfully")
 
     def deleteActivity(self):
+        vals = [(self.parent.ongoing_records.item(self.parent.ongoing_records.focus()))['values'], # nama kegiatan yang diselect di tree ongoing_records
+                (self.parent.idle_records.item(self.parent.idle_records.focus()))['values']] # nama kegiatan yang diselect di tree idle_records
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
 
-        """ # fetch data
-        sql = "SELECT * FROM List_of_Activities WHERE ActivitiyID = %s"
-        vals = ([self.parent.activityID.get()] )
-        cursor.execute(sql)
-        data = cursor.fetchall()
-        print(vals) """
-
-        sql = "DELETE FROM List_of_Activities WHERE ActivityName = %s"
-        vals = ([self.parent.activityName.get()] )
-        cursor.execute(sql, vals)
-        print(vals)
+        # Bisa ngedelete dari salah satu ongoing atau idle tree, atau bisa delete dari keduanya langsung
+        for val in vals:
+            if (val != ''):
+                sql = "DELETE FROM List_of_Activities WHERE ActivityID = %s"
+                cursor.execute(sql, [val[0]])
         mydb.commit()
+
         self.parent.fetchOngoingData()
         self.parent.fetchIdleData()
         mydb.close()
-        messagebox.showinfo("Delete", "Record Deleted Succsessfully")
 
-    def markAsComplete(self):
+        if not (vals[0] == '' and vals[1] == ''):
+            messagebox.showinfo("Delete", "Record Deleted Successfully")
+
+        # Reset selection
+        for item in self.parent.ongoing_records.selection():
+            self.parent.ongoing_records.selection_remove(item)
+
+        for item in self.parent.idle_records.selection():
+            self.parent.idle_records.selection_remove(item)
+
+    def markAsComplete(self, ):
+        vals = [(self.parent.ongoing_records.item(self.parent.ongoing_records.focus()))['values'], # nama kegiatan yang diselect di tree ongoing_records
+                (self.parent.idle_records.item(self.parent.idle_records.focus()))['values']] # nama kegiatan yang diselect di tree idle_records
+
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
         cursor = mydb.cursor()
-        cursor.execute("UPDATE List_of_Activities SET isDone = TRUE WHERE ActivityID = %s", self.parent.activityID.get())
+
+        # Bisa ngecomplete dari salah satu ongoing atau idle tree, atau bisa complete dari keduanya langsung
+        for val in vals:
+            if (val != ''):
+                sql = "UPDATE List_of_Activities SET isDone = TRUE WHERE ActivityID = %s"
+                cursor.execute(sql, [val[0]])
         mydb.commit()
-        mydb.close()
+
         self.parent.fetchOngoingData()
         self.parent.fetchIdleData()
-        messagebox.showinfo("Add Activity Form", "Activity Record Entered Succsessfully")
+        mydb.close()
+
+        if not (vals[0] == '' and vals[1] == ''):
+            messagebox.showinfo("Add Activity Form", "Activity Record Entered Successfully")
+
+        # Reset selection
+        for item in self.parent.ongoing_records.selection():
+            self.parent.ongoing_records.selection_remove(item)
+
+        for item in self.parent.idle_records.selection():
+            self.parent.idle_records.selection_remove(item)
             
 
 
