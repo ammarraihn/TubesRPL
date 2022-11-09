@@ -15,6 +15,7 @@ class Dashboard(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
+
         self.activityID = IntVar()
         self.activityName = StringVar()
         self.category = StringVar()
@@ -28,27 +29,33 @@ class Dashboard(tk.Frame):
         self.lbl = Label(self.centralframe, text="DASHBOARD", font=HEADING1, background="#1c2e3e", borderwidth=0, fg="white")
         self.lbl.pack(anchor="center", pady=55)
 
-        self.ongoingframe = Frame(self.centralframe)
+        self.contentframe = Frame(self.centralframe, background="#1c2e3e")
+        self.contentframe.pack()
+
+        self.tableframe = Frame(self.contentframe, background="#1c2e3e")
+        self.tableframe.pack(side=LEFT)
+
+        self.ongoingframe = Frame(self.tableframe)
         self.ongoingframe.pack(ipady=130, ipadx=400)
         self.ongoingframelabel = LabelFrame(self.ongoingframe, text="Task for Today", font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.ongoingframelabel.pack(fill=BOTH, expand=YES, ipady=16)
         self.ongoingframe.pack_propagate(False)
 
-        self.idleframe = Frame(self.centralframe)
+        self.idleframe = Frame(self.tableframe)
         self.idleframe.pack(ipady=130, ipadx=400, pady=20)
         self.idleframelabel = LabelFrame(self.idleframe, text="Your Task Later",font=HEADING2, background="#1c2e3e", foreground="#ffffff")
         self.idleframelabel.pack(fill=BOTH, expand=YES, ipady=16)
         self.idleframe.pack_propagate(False)
 
-        self.btnframe = Frame(self.centralframe, background="#1c2e3e")
-        self.btnframe.pack(ipadx=70, ipady=20, pady=30)
+        self.btnframe = Frame(self.contentframe, background="#1c2e3e")
+        self.btnframe.pack(side=LEFT, anchor="n", ipadx=20, ipady=30, pady=200, padx=80)
         
         self.addbtn = Button(self.btnframe, text="Add", command = self.popup_window, borderwidth=0, background="#ffffff", fg="#1c2e3e", font=FONT)
-        self.addbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
+        self.addbtn.pack(ipadx=30,expand=True, fill=BOTH, pady=10)
         self.deletebtn = Button(self.btnframe, text="Delete", command= self.manageAct.deleteActivity, borderwidth=0, background="#ffffff", fg="#1c2e3e", font=FONT)
-        self.deletebtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
+        self.deletebtn.pack(ipadx=30, expand=True, fill=BOTH, pady=10)
         self.markbtn = Button(self.btnframe, text="Mark Complete", command= self.manageAct.markAsComplete, borderwidth=0, background="#f35c27", fg="#1c2e3e", font=FONT)
-        self.markbtn.pack(ipadx=30, side=LEFT, expand=True, fill=BOTH, padx=10)
+        self.markbtn.pack(ipadx=30, expand=True, fill=BOTH, pady=10)
         
         # Treeview styling configuration
         style1 = ttk.Style()
@@ -179,6 +186,8 @@ class Completed(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, background="#1c2e3e")
         self.controller = controller
+
+        
         
 
         self.centralframe = Frame(self, background="#1c2e3e")
