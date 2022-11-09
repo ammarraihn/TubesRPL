@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import tkinter as tk
 import mysql.connector
+from datetime import date
 
 
 class manageActivity(tk.Tk):
@@ -21,13 +22,18 @@ class manageActivity(tk.Tk):
                     self.parent.category.get(), 
                     self.parent.deadline.get()
                 ))
-                mydb.commit()
-                mydb.close()
-                self.parent.fetchOngoingData()
-                self.parent.fetchIdleData()
-                messagebox.showinfo("Add Activity", "Activity record entered successfully")
+                if self.parent.deadline.get() < str(date.today()):
+                    messagebox.showwarning("Add Activity Form", "Deadline is in the past, please enter a valid deadline")
+                else:
+                    mydb.commit()
+                    mydb.close()
+                    self.parent.fetchOngoingData()
+                    self.parent.fetchIdleData()
+                    messagebox.showinfo("Add Activity", "Activity record entered successfully")
         except:
             messagebox.showerror("Add Activity Form", "Error Occured, Please entry valid data")
+        self.parent.popup.destroy()
+        self.parent.clearentry()
 
     def deleteActivity(self):
         vals = [(self.parent.ongoing_records.item(self.parent.ongoing_records.focus()))['values'], # nama kegiatan yang diselect di tree ongoing_records

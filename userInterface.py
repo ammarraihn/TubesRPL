@@ -147,6 +147,11 @@ class Dashboard(tk.Frame):
         self.btn1 = Button(self.addframe, text="Add", font=FONT, command=self.manageAct.addData)
         self.btn1.pack( pady=10)
 
+    def clearentry(self):
+        self.activityName.set("")
+        self.category.set("")
+        self.deadline.set("")   
+
     def fetchOngoingData(self): # fetch record ongoing
         self.ongoing_records.delete(*self.ongoing_records.get_children()) # Reset treeviewnya
 
