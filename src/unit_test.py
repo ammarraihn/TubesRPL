@@ -1,8 +1,6 @@
 import pytest
 import mysql.connector
 
-from manageActivity import manageActivity
-
 def conn():
     try:
         conn = mysql.connector.connect(
@@ -55,7 +53,7 @@ def test_fetchOngoingData():
 def test_fetchIdleData():
     mydb = conn()
     cursor = mydb.cursor()
-    sql = "SELECT * FROM List_of_Activities WHERE isDone = TRUE"
+    sql = "SELECT * FROM List_of_Activities WHERE isDone = FALSE"
     cursor.execute(sql)
     result = cursor.fetchall()
     mydb.close()

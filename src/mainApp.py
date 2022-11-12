@@ -10,7 +10,7 @@ class mainApp(tk.Tk):
         tk.Tk.__init__(self)
 
         self.title("OnTrack : To-do Application")
-        self.iconphoto(True, tk.PhotoImage(file='logo_window.png'))
+        self.iconphoto(True, tk.PhotoImage(file='img/window_logo.png'))
         self.navbar()
         self.container = tk.Frame(self)
         self.container.pack(side = "top", fill = "both", expand = True)
@@ -35,7 +35,7 @@ class mainApp(tk.Tk):
         self.header.pack(fill=X)
 
         # LOGO ONTRACK
-        logo1 = Image.open("logo.png")
+        logo1 = Image.open("img/logo.png")
         resize_logo1 = logo1.resize((250,70))
         logo_ontrack = ImageTk.PhotoImage(resize_logo1)
         

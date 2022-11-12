@@ -23,6 +23,8 @@ class Dashboard(tk.Frame):
 
         self.manageAct =manageActivity(self)
 
+        #================================== Dashboard Frame ==================================
+
         self.centralframe = Frame(self, background="#1c2e3e")
         self.centralframe.pack(ipady=700, ipadx=700)
 
@@ -139,7 +141,7 @@ class Dashboard(tk.Frame):
         self.listbox1 = ttk.Combobox(self.addframe, values=["Academic", "Entertainment", "Social", "Others"], textvariable = self.category)
         self.listbox1.pack(fill='x', expand=True)
 
-        self.lbl2 = Label(self.addframe, text="Deadline (YYYY-MM-DD :", font=FONT)
+        self.lbl2 = Label(self.addframe, text="Deadline (YYYY-MM-DD) :", font=FONT)
         self.lbl2.pack(fill='x', expand=True)
         self.txtbox2 = Entry(self.addframe, textvariable=self.deadline)
         self.txtbox2.pack(fill='x', expand=True)
@@ -147,12 +149,14 @@ class Dashboard(tk.Frame):
         self.btn1 = Button(self.addframe, text="Add", font=FONT, command=self.manageAct.addData)
         self.btn1.pack( pady=10)
 
+    # Clear entry box
     def clearentry(self):
         self.activityName.set("")
         self.category.set("")
         self.deadline.set("")   
 
-    def fetchOngoingData(self): # fetch record ongoing
+    # fetch record ongoing
+    def fetchOngoingData(self):
         self.ongoing_records.delete(*self.ongoing_records.get_children()) # Reset treeviewnya
 
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
@@ -167,8 +171,8 @@ class Dashboard(tk.Frame):
         mydb.close()
 
         
-
-    def fetchIdleData(self): # fetch record idle
+    # fetch record idle
+    def fetchIdleData(self): 
         self.idle_records.delete(*self.idle_records.get_children())# Reset treeviewnya
 
         mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
@@ -193,7 +197,7 @@ class Completed(tk.Frame):
         self.controller = controller
 
         
-        
+        #===================== Completed Frame =====================
 
         self.centralframe = Frame(self, background="#1c2e3e")
         self.centralframe.pack(ipady=700, ipadx=700, pady=35)
