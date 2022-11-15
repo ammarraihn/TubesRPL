@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from manageActivity import manageActivity
 import tkinter as tk
-import mysql.connector
+from modelActivity import modelActivity
 
 HEADING1 = ('Poppins', 20, 'bold')
 HEADING2 = ('Poppins', 14)
@@ -21,7 +21,7 @@ class Dashboard(tk.Frame):
         self.category = StringVar()
         self.deadline = StringVar()
 
-        self.manageAct =manageActivity(self)
+        self.manageAct = manageActivity(self, modelActivity())
 
         #================================== Dashboard Frame ==================================
 
@@ -159,32 +159,23 @@ class Dashboard(tk.Frame):
     def fetchOngoingData(self):
         self.ongoing_records.delete(*self.ongoing_records.get_children()) # Reset treeviewnya
 
-        mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
-        cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityID, ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline = CURDATE() AND isDone = FALSE")
-        result = cursor.fetchall()
+        result = self.manageAct.activityModel.selectOngoingDb()
+
         if len(result) != 0:
             self.ongoing_records.delete(*self.ongoing_records.get_children())
             for row in result:
                 self.ongoing_records.insert('', END, values= row)
-            mydb.commit()
-        mydb.close()
-
         
     # fetch record idle
     def fetchIdleData(self): 
         self.idle_records.delete(*self.idle_records.get_children())# Reset treeviewnya
 
-        mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
-        cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityID, ActivityName, CategoryName, Deadline FROM List_of_Activities WHERE Deadline > CURDATE() AND isDone = FALSE ORDER BY Deadline ASC")
-        result = cursor.fetchall()
+        result = self.manageAct.activityModel.selectIdleDb()
+        
         if len(result) != 0:
             self.idle_records.delete(*self.idle_records.get_children())
             for row in result:
                 self.idle_records.insert('', END, values= row)
-            mydb.commit()
-        mydb.close()
 
     def refetchData(self):
         self.fetchOngoingData()
@@ -196,7 +187,8 @@ class Completed(tk.Frame):
         tk.Frame.__init__(self, parent, background="#1c2e3e")
         self.controller = controller
 
-        
+        self.manageAct = manageActivity(self, modelActivity())
+
         #===================== Completed Frame =====================
 
         self.centralframe = Frame(self, background="#1c2e3e")
@@ -307,58 +299,42 @@ class Completed(tk.Frame):
     def fetchCategory1Data(self):
         self.category1_records.delete(*self.category1_records.get_children()) # Reset treeviewnya
 
-        mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
-        cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Academic' AND isDone = TRUE ORDER BY Deadline ASC")
-        result = cursor.fetchall()
+        result = self.manageAct.activityModel.selectCompletedByCategoryDb("Academic")
+
         if len(result) != 0:
             self.category1_records.delete(*self.category1_records.get_children())
             for row in result:
                 self.category1_records.insert('', END, values= row)
-            mydb.commit()
-        mydb.close()
 
     def fetchCategory2Data(self):
         self.category2_records.delete(*self.category2_records.get_children()) # Reset treeviewnya
 
-        mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
-        cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Entertainment' AND isDone = TRUE ORDER BY Deadline ASC")
-        result = cursor.fetchall()
+        result = self.manageAct.activityModel.selectCompletedByCategoryDb("Entertainment")
+
         if len(result) != 0:
             self.category2_records.delete(*self.category2_records.get_children())
             for row in result:
                 self.category2_records.insert('', END, values= row)
-            mydb.commit()
-        mydb.close()
 
     def fetchCategory3Data(self):
         self.category3_records.delete(*self.category3_records.get_children()) # Reset treeviewnya
 
-        mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
-        cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Social' AND isDone = TRUE ORDER BY Deadline ASC")
-        result = cursor.fetchall()
+        result = self.manageAct.activityModel.selectCompletedByCategoryDb("Social")
+
         if len(result) != 0:
             self.category3_records.delete(*self.category3_records.get_children())
             for row in result:
                 self.category3_records.insert('', END, values= row)
-            mydb.commit()
-        mydb.close()
 
     def fetchCategory4Data(self):
         self.category4_records.delete(*self.category4_records.get_children()) # Reset treeviewnya
 
-        mydb = mysql.connector.connect(host = "localhost", user = "root", password = "qwerty123", database = "ontrack", auth_plugin = "mysql_native_password")
-        cursor = mydb.cursor()
-        cursor.execute("SELECT ActivityName, Deadline FROM List_of_Activities WHERE CategoryName = 'Others' AND isDone = TRUE ORDER BY Deadline ASC")
-        result = cursor.fetchall()
+        result = self.manageAct.activityModel.selectCompletedByCategoryDb("Others")
+
         if len(result) != 0:
             self.category4_records.delete(*self.category4_records.get_children())
             for row in result:
                 self.category4_records.insert('', END, values= row)
-            mydb.commit()
-        mydb.close()
 
     def refetchData(self):
         self.fetchCategory1Data()
